@@ -1,0 +1,14 @@
+<nav>
+    <h1>All articles</h1>
+    <a href="/">Back</a>
+    <br><br>
+</nav>
+<ul id="navigation">
+    {% for article in articles %}
+    <li>
+        <a href="/articles/{{ article.id }}">
+            {{ article.title }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
