@@ -90,10 +90,6 @@ class UserControllers
 
             Session::setUser($user->getId(), $user->getName(), $user->getSurname() );
 
-//            $_SESSION["userid"] = $user->getId();
-//            $_SESSION["userName"] = $user->getName();
-//            $_SESSION["surName"] = $user->getSurname();
-
             return new Redirect('/');
         } else {
             return new Redirect('/users/message');
