@@ -88,9 +88,11 @@ class UserControllers
                 $profileResult['birthday']
             );
 
-            $_SESSION["userid"] = $user->getId();
-            $_SESSION["userName"] = $user->getName();
-            $_SESSION["surName"] = $user->getSurname();
+            Session::setUser($user->getId(), $user->getName(), $user->getSurname() );
+
+//            $_SESSION["userid"] = $user->getId();
+//            $_SESSION["userName"] = $user->getName();
+//            $_SESSION["surName"] = $user->getSurname();
 
             return new Redirect('/');
         } else {
