@@ -1,3 +1,5 @@
+{% extends "layout.twig" %}
+{% block content %}
 <nav>
     <h1>Sign Up</h1>
     <a href="/">Back</a>
@@ -18,11 +20,13 @@
     <label for="password">Password</label>
     <input type="password" id="password" name="password" placeholder="password"  style="margin: 10px" required>
     <br>
-    <label for="password">Password</label>
+    <label for="password">Confirm Password</label>
     <input type="password" id="passwordConfirm" name="password" placeholder="password" style="margin: 10px" required>
     <br>
     <label for="birthday">Birthday</label>
-    <input type="text" id="birthday" name="birthday" placeholder="birthday" style="margin: 10px" required >
+    <input type="date" id="birthday" name="birthday" placeholder="birthday" style="margin: 10px" required >
     <br>
-    <input type="submit" name="signUp" value="ADD" style="margin: 10px">
+    <input type="submit" name="signUp" value="Sign Up" style="margin: 10px">
 </form>
+    <br><br>
+{% endblock %}

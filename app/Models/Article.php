@@ -7,13 +7,13 @@ class Article
     private string $title;
     private string $description;
     private string $createdAt;
-    private ?string $userId;
+    private ?int $userId;
     private ?int $id;
 
     public function __construct(string $title,
                                 string $description,
                                 string $createdAt,
-                                ?string $userId = null,
+                                ?int $userId = null,
                                 ?int $id = null)
     {
         $this->title = $title;

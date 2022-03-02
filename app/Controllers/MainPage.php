@@ -10,17 +10,10 @@ class MainPage
     {
         if (Session::isAuthorized()) {
             return new View('/main', [
-                'signUp' => '',
-                'login' => '',
-                'logout' => 'LOGOUT'
+                'authorized' => true,
             ]);
         } else {
-            return new View('/main', [
-                'signUp' => 'SIGN UP',
-                'login' => 'LOGIN',
-                'logout' => ''
-            ]);
+            return new View('/main', []);
         }
     }
-
 }

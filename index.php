@@ -1,8 +1,8 @@
 <?php
 
-session_start();
 
 use App\Controllers\ArticleControllers;
+use App\Controllers\CommentController;
 use App\Controllers\MainPage;
 use App\Controllers\UserControllers;
 use App\Redirect;
@@ -15,6 +15,7 @@ use Twig\Loader\FilesystemLoader;
 
 require_once 'vendor/autoload.php';
 
+session_start();
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/', [MainPage::class, 'main']);
@@ -29,6 +30,11 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
 
     $r->addRoute('GET', '/articles/{id:\d+}/edit', [ArticleControllers::class, 'edit']);
     $r->addRoute('POST', '/articles/{id:\d+}', [ArticleControllers::class, 'update']);
+
+    $r->addRoute('POST', '/articles/{id:\d+}/likes', [ArticleControllers::class, 'likes']);
+
+    $r->addRoute('POST', '/articles/{id:\d+}/addComment', [CommentController::class, 'addComment']);
+    $r->addRoute('POST', '/comment/{id:\d+}/delete', [CommentController::class, 'deleteComment']);
 
     $r->addRoute('GET', '/users/signUp', [UserControllers::class, 'signUp']);
     $r->addRoute('POST', '/users/register', [UserControllers::class, 'register']);
@@ -72,7 +78,7 @@ switch ($routeInfo[0]) {
 
         if ($response instanceof View) {
             try {
-                echo $twig->render($response->getPath() . '.html', $response->getVariables());
+                echo $twig->render($response->getPath() . '.twig', $response->getVariables());
             } catch (LoaderError|RuntimeError|SyntaxError $e) {
             }
         }
@@ -84,3 +90,10 @@ switch ($routeInfo[0]) {
         break;
 }
 
+if(isset($_SESSION["errors"])){
+    unset($_SESSION["errors"]);
+}
+
+if(isset($_SESSION["inputs"])){
+    unset($_SESSION["inputs"]);
+}

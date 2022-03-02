@@ -15,4 +15,6 @@ class Session
         $_SESSION["name"] = $name;
         $_SESSION["surname"] = $surname;
     }
+
+
 }

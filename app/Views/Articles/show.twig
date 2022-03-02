@@ -1,0 +1,57 @@
+{% extends "layout.twig" %}
+{% block content %}
+<nav>
+    <h1>Single article</h1>
+    <a href="/">Home</a>
+    <br>
+    <a href="/articles">Back</a>
+    <br>
+    {% if article.userId == user %}
+    <a href="/articles/{{ article.id }}/edit">Edit article</a>
+    {% endif %}
+</nav>
+<h3>{{ article.title }}</h3>
+<p>{{ article.description }}</p>
+<p>
+    <small>
+        Created at: {{ article.createdAt }} by: {{ userName }}
+        <br>
+        Likes: {{ likes }}
+    </small>
+</p>
+{% if  user == likeButtons %}
+    <form method="post" action="/articles/{{ article.id }}/likes" h>
+        <button type="submit"  name="liked" value="1">Like</button>
+        <button type="submit" name="liked" value="-1">Dislike</button>
+    </form>
+{% endif %}
+
+<br><br>
+
+<ul id="navigation">
+    {% for comment in comments %}
+    <li>
+        <a href="/articles/{{ article.id }}">
+            {{ comment.comment }}
+        </a>
+        <br>
+        Created at: {{ comment.createdAt }} by: {{ comment.creatorName }}
+        {% if comment.userId == creator %}
+                <form method="post" action="/comment/{{ comment.id }}/delete">
+                    <button onclick="return confirm('Really Delete?')">X</button>
+                </form>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+
+
+{% if authorized %}
+<form method="post" action="/articles/{{ article.id }}/addComment">
+    <label for="comment">Add comment:</label>
+    <textarea type="text" id="comment" name="comment" rows="3" cols="40" required></textarea> <br><br>
+    <input type="submit" value="Add new comment">
+</form>
+{% endif %}
+    <br><br>
+{% endblock %}
