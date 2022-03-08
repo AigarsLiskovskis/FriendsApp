@@ -1,22 +1,22 @@
 {% extends "layout.twig" %}
 {% block content %}
-<nav>
-    <h1>Update article</h1>
-    <a href="/">Home</a>
-    <br>
-    <a href="/articles/{{ article.id }}">Back</a>
-    <br><br>
-</nav>
-<form method="post" action="/articles/{{ article.id }}">
-    <label for="Title">Title:</label>
-    <input type="text" id="Title" name="title" value="{{article.title}}" required>
-    <br><br>
-    <label for="description">Description:</label>
-    <textarea type="text" id="description" name="description" rows="3" cols="20" required>
-        {{article.description}}
+    <nav>
+        <h1>Update article</h1>
+        <a href="/">Home</a>
+        <br>
+        <a href="/articles/{{ article.id }}">Back</a>
+        <br><br>
+    </nav>
+    <form method="post" action="/articles/{{ article.id }}">
+        <label for="Title">Title:</label>
+        <input type="text" id="Title" name="title" value="{{ article.title }}" required>
+        <br><br>
+        <label for="description">Description:</label>
+        <textarea type="text" id="description" name="description" rows="3" cols="20" required>
+        {{ article.description }}
     </textarea>
-    <br><br>
-    <input type="submit" value="Update article">
-</form>
+        <br><br>
+        <input type="submit" value="Update article">
+    </form>
     <br><br>
 {% endblock %}

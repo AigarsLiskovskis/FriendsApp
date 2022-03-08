@@ -11,6 +11,7 @@ class MainPage
         if (Session::isAuthorized()) {
             return new View('/main', [
                 'authorized' => true,
+                'userFirstName' => $_SESSION['name']
             ]);
         } else {
             return new View('/main', []);

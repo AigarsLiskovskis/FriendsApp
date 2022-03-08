@@ -1,0 +1,24 @@
+{% extends "layout.twig" %}
+{% block content %}
+    <nav>
+        <h1>Find new friend</h1>
+        <a href="/">Back</a> |
+        <a href="/showFriends">See Friends</a>
+        <br><br>
+    </nav>
+    <ul id="navigation">
+        {% for user in users %}
+            {% if user.id != loginUser %}
+                <li>
+                    {{ user.name }}
+                    {{ user.surname }}
+                    {{ user.birthday }}
+                    <form method="post" action="invite/{{ user.id }}">
+                        <button>Invite</button>
+                    </form>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <br><br>
+{% endblock %}

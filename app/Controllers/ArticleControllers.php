@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Database;
 use App\Exceptions\FormValidationException;
 use App\Exceptions\ResourceNotFoundException;
+use App\Models\Apartment;
 use App\Models\Article;
 use App\Redirect;
 use App\Validation\ArticleFormValidator;
@@ -19,33 +20,31 @@ class ArticleControllers
      */
     public function index(): View
     {
-        //try {
-            $conn = Database::connection();
-            $sql = "SELECT * FROM articles order by created_at desc";
-            $stmt = $conn->prepare($sql);
-            $result = $stmt->executeQuery()->fetchAllAssociative();
+        $articlesQuery = Database::connection()
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('articles')
+            ->orderBy('created_at', 'desc')
+            ->executeQuery()
+            ->fetchAllAssociative();
 
-            $articles = [];
-            foreach ($result as $item) {
-                $articles[] = new Article(
-                    $item['title'],
-                    $item['description'],
-                    $item['created_at'],
-                    $item['user_id'],
-                    $item['id']
-                );
-            }
-//        }catch (){
-//
-//        }
-
-
+        $articles = [];
+        foreach ($articlesQuery as $item) {
+            $articles[] = new Article(
+                $item['title'],
+                $item['description'],
+                $item['created_at'],
+                $item['user_id'],
+                $item['id']
+            );
+        }
 
         if (Session::isAuthorized()) {
             return new View('Articles/index', [
                 'articles' => $articles,
                 'authorized' => true,
-                'creator' => $_SESSION["userid"]
+                'userId' => $_SESSION["userid"],
+                'userFirstName' => $_SESSION['name']
             ]);
         } else {
             return new View('Articles/index', [
@@ -63,16 +62,16 @@ class ArticleControllers
         $_SESSION['articleId'] = $input;
 
         try {
-        $articleQuery = Database::connection()
-            ->createQueryBuilder()
-            ->select('*')
-            ->from('articles')
-            ->where('id=?')
-            ->setParameter(0,(int)$input['id'])
-            ->executeQuery()
-            ->fetchAssociative();
+            $articleQuery = Database::connection()
+                ->createQueryBuilder()
+                ->select('*')
+                ->from('articles')
+                ->where('id=?')
+                ->setParameter(0, (int)$input['id'])
+                ->executeQuery()
+                ->fetchAssociative();
 
-            if(!$articleQuery){
+            if (!$articleQuery) {
                 throw new ResourceNotFoundException("Article with id {$input['id']} not found");
             }
             $article = new Article(
@@ -82,53 +81,60 @@ class ArticleControllers
                 $articleQuery['user_id'],
                 $articleQuery['id']
             );
-        }catch (ResourceNotFoundException $exception){
+        } catch (ResourceNotFoundException $exception) {
             return new View('404');
         }
 
-
         $comments = (new CommentController())->showComments($articleQuery['id']);
 
-        $conn = Database::connection();
-        $sql = "SELECT * FROM user_profiles where user_id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(1, $articleQuery['user_id']);
-        $articleUser = $stmt->executeQuery()->fetchAllAssociative()[0];
+        $ownerQuery = Database::connection()
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('user_profiles')
+            ->where('user_id=?')
+            ->setParameter(0, $articleQuery['user_id'])
+            ->executeQuery()
+            ->fetchAssociative();
 
-        $articleName = $articleUser['name'] . ' ' . $articleUser['surname'];
+        $articleOwnerName = $ownerQuery['name'] . ' ' . $ownerQuery['surname'];
 
-        $conn = Database::connection();
-        $sql = "SELECT  sum(likes) FROM likes where article_id = {$articleQuery['id']}";
-        $stmt = $conn->prepare($sql);
-        $resultLikes = $stmt->executeQuery()->fetchAllAssociative()[0];
+        $likesQuery = Database::connection()
+            ->createQueryBuilder()
+            ->select('sum(likes)')
+            ->from('likes')
+            ->where('article_id=?')
+            ->setParameter(0, $articleQuery['id'])
+            ->executeQuery()
+            ->fetchAssociative();
 
-        $likes = $resultLikes['sum(likes)'] ?? 0;
+        $likes = $likesQuery['sum(likes)'] ?? 0;
 
         if (Session::isAuthorized()) {
-            $conn = Database::connection();
-            $sql = "SELECT *  FROM likes where article_id = {$articleQuery['id']} and user_id = {$_SESSION['userid']}";
-            $stmt = $conn->prepare($sql);
-            $result = $stmt->executeQuery();
 
-            $likeButtons = 0;
-            if ($result->rowCount() <= 0) {
-                $likeButtons = $_SESSION['userid'];
-            }
+
+            $likesQuery = Database::connection()
+                ->createQueryBuilder()
+                ->select('id')
+                ->from('likes')
+                ->where("article_id = $articleQuery[id]")
+                ->andWhere("user_id = $_SESSION[userid]")
+                ->executeQuery()
+                ->fetchAssociative();
 
             return new View('Articles/show', [
+                'userFirstName' => $_SESSION['name'],
                 'article' => $article,
                 'user' => $_SESSION['userid'],
-                'likeButtons' => $likeButtons,
-                'userName' => $articleName,
+                'articleOwnerName' => $articleOwnerName,
+                'likeButtons' => !$likesQuery,
                 'likes' => $likes,
-                'creator' => $_SESSION["userid"],
                 'comments' => $comments,
                 'authorized' => true
             ]);
         } else {
             return new View('Articles/show', [
                 'article' => $article,
-                'userName' => $articleName,
+                'articleOwnerName' => $articleOwnerName,
                 'likes' => $likes,
                 'comments' => $comments,
             ]);
@@ -139,6 +145,7 @@ class ArticleControllers
     public function create(): View
     {
         return new View('Articles/create', [
+            'userFirstName' => $_SESSION['name'],
             'errors' => Errors::getAll(),
             'inputs' => $_SESSION['inputs'] ?? []
         ]);
@@ -150,7 +157,7 @@ class ArticleControllers
      */
     public function store(): Redirect
     {
-        try{
+        try {
             $validator = (new ArticleFormValidator($_POST, [
                 'title' => ['required', 'min:3'],
                 'description' => ['required']
@@ -159,14 +166,14 @@ class ArticleControllers
 
             Database::connection()
                 ->insert('articles', [
-                        'title' => $_POST['title'],
-                        'description' => trim($_POST['description']),
-                        'user_id' => $_SESSION["userid"]
-                    ]);
+                    'title' => $_POST['title'],
+                    'description' => trim($_POST['description']),
+                    'user_id' => $_SESSION["userid"]
+                ]);
 
             return new Redirect('/articles');
 
-        }catch(FormValidationException $exception){
+        } catch (FormValidationException $exception) {
 
             $_SESSION['errors'] = $validator->getErrors();
             $_SESSION['inputs'] = $_POST;
@@ -191,24 +198,27 @@ class ArticleControllers
      */
     public function edit(array $input): View
     {
-        $conn = Database::connection();
-        $sql = "SELECT * FROM articles where id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(1, $input['id']);
-        $result = $stmt->executeQuery()->fetchAllAssociative()[0];
+        $editQuery = Database::connection()
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('articles')
+            ->where('id =?')
+            ->setParameter(0, $input['id'])
+            ->executeQuery()
+            ->fetchAssociative();
 
         $article = new Article(
-            $result['title'],
-            $result['description'],
-            $result['created_at'],
-            $result['user_id'],
-            $result['id']
+            $editQuery['title'],
+            $editQuery['description'],
+            $editQuery['created_at'],
+            $editQuery['user_id'],
+            $editQuery['id']
         );
 
         return new View('Articles/update', [
-            'article' => $article
+            'article' => $article,
+            'userFirstName' => $_SESSION['name']
         ]);
-
     }
 
 
@@ -221,7 +231,7 @@ class ArticleControllers
             ->update('articles',
                 ['title' => $_POST['title'],
                     'description' => $_POST['description'],
-                    'user_id' => $_SESSION["userName"] . ' ' . $_SESSION["surName"]],
+                    'user_id' => $_SESSION["userid"]],
                 ['id' => (int)$input['id']]);
         return new Redirect('/articles/' . $input['id']);
     }
@@ -232,12 +242,16 @@ class ArticleControllers
      */
     public function likes(array $input): Redirect
     {
-        $conn = Database::connection();
-        $sql = "SELECT * FROM likes where article_id = $input[id] and user_id = $_SESSION[userid]";
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery();
+        $likesQuery = Database::connection()
+            ->createQueryBuilder()
+            ->select('id')
+            ->from('likes')
+            ->where("article_id = $input[id]")
+            ->andWhere("user_id = $_SESSION[userid]")
+            ->executeQuery()
+            ->fetchAssociative();
 
-        if ($result->rowCount() <= 0) {
+        if (!$likesQuery) {
             Database::connection()
                 ->insert('likes',
                     [

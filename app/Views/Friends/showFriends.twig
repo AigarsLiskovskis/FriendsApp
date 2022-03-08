@@ -1,0 +1,47 @@
+{% extends "layout.twig" %}
+{% block content %}
+    <nav>
+        <a href="/">Back</a> |
+        <a href="/findFriends">Find Friend</a>
+        <br>
+    </nav>
+    <h3>Wants to become your friends:</h3>
+    <br>
+    <ul id="navigation">
+        {% for inviter in inviters %}
+            {% if user.id != loginUser %}
+                <li>
+                    {{ inviter.name }}
+                    {{ inviter.surname }}
+                    {{ inviter.birthday }}
+                    <form method="post" action="accept/{{ inviter.id }}">
+                        <button>Invite</button>
+                    </form>
+                    <form method="post" action="reject/{{ inviter.id }}">
+                        <button>Reject</button>
+                    </form>
+
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <h3>Your friends:</h3>
+    <br>
+    <ul id="navigation">
+        {% for friend in friends %}
+            {% if friend.id != loginUser %}
+                <li>
+                    {{ friend.name }}
+                    {{ friend.surname }}
+                    {{ friend.birthday }}
+                    <form method="post" action="end/{{ friend.id }}">
+                        <button>Break up Friendship</button>
+                    </form>
+                </li>
+                <br><br>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <br><br>
+{% endblock %}
+

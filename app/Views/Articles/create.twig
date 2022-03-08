@@ -1,29 +1,26 @@
 {% extends "layout.twig" %}
 {% block content %}
-<nav>
-    <h1>Create article</h1>
-    <a href="/">Home</a>
-    <br>
-    <a href="/articles">Back</a>
-    <br><br>
-</nav>
-<form method="post" action="/articles">
-    <label for="Title">Title:</label>
-    <input type="text" id="Title" name="title" value="{{ inputs.title }}">
-    {% if errors.title %}
+    <nav>
+        <h1>Create article</h1>
+        <a href="/">Home</a>
+        <br>
+        <a href="/articles">Back</a>
+        <br><br>
+    </nav>
+    <form method="post" action="/articles">
+        <label for="Title">Title:</label>
+        <input type="text" id="Title" name="title" value="{{ inputs.title }}">
+        {% if errors.title %}
             <small style="color:red;">{{ errors.title[0] }}</small>
-    {% endif %}
-    <br>
-    <br>
-    <label for="description">Description:</label>
-    <textarea type="text" id="description" name="description" rows="3" cols="20">
-    {{ inputs.description }}
-    </textarea>
-    {% if errors.description %}
-        <small style="color:red;">{{ errors.description[0] }}</small>
-    {% endif %}
-    <br><br>
-    <input type="submit" value="Add new article">
-</form>
+        {% endif %}
+        <br><br>
+        <label for="description">Description:</label>
+        <textarea type="text" id="description" name="description" rows="3" cols="20">{{ inputs.description }}</textarea>
+        {% if errors.description %}
+            <small style="color:red;">{{ errors.description[0] }}</small>
+        {% endif %}
+        <br><br>
+        <input type="submit" value="Add new article">
+    </form>
     <br><br>
 {% endblock %}

@@ -3,6 +3,7 @@
 
 use App\Controllers\ArticleControllers;
 use App\Controllers\CommentController;
+use App\Controllers\FriendsController;
 use App\Controllers\MainPage;
 use App\Controllers\UserControllers;
 use App\Redirect;
@@ -39,13 +40,21 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('GET', '/users/signUp', [UserControllers::class, 'signUp']);
     $r->addRoute('POST', '/users/register', [UserControllers::class, 'register']);
 
-
     $r->addRoute('GET', '/users', [UserControllers::class, 'login']);
     $r->addRoute('POST', '/users/signIn', [UserControllers::class, 'signIn']);
 
     $r->addRoute('GET', '/logout', [UserControllers::class, 'logout']);
-
     $r->addRoute('GET', '/users/message', [UserControllers::class, 'error']);
+
+    $r->addRoute('GET', '/findFriends', [FriendsController::class, 'findFriends']);
+    $r->addRoute('GET', '/showFriends', [FriendsController::class, 'showFriends']);
+
+    $r->addRoute('POST', '/invite/{id:\d+}', [FriendsController::class, 'inviteFriend']);
+    $r->addRoute('POST', '/reject/{id:\d+}', [FriendsController::class, 'rejectFriend']);
+    $r->addRoute('POST', '/accept/{id:\d+}', [FriendsController::class, 'acceptFriend']);
+
+    $r->addRoute('POST', '/end/{id:\d+}', [FriendsController::class, 'endFriendship']);
+
 });
 
 // Fetch method and URI from somewhere
@@ -97,3 +106,4 @@ if(isset($_SESSION["errors"])){
 if(isset($_SESSION["inputs"])){
     unset($_SESSION["inputs"]);
 }
+

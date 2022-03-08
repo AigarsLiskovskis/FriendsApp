@@ -14,13 +14,18 @@ class CommentController
      */
     public function showComments($articleId): array
     {
-        $conn = Database::connection();
-        $sql = "SELECT * FROM comments where article_id = $articleId order by created_at desc";
-        $stmt = $conn->prepare($sql);
-        $commentResult = $stmt->executeQuery()->fetchAllAssociative();
+        $commentQuery = Database::connection()
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('comments')
+            ->where('article_id =?')
+            ->setParameter(0, $articleId)
+            ->orderBy('created_at', 'desc')
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $comments = [];
-        foreach ($commentResult as $item) {
+        foreach ($commentQuery as $item) {
             $comments[] = new Comment(
                 $item['id'],
                 $item['comment'],

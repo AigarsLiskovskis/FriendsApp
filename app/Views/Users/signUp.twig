@@ -1,32 +1,32 @@
 {% extends "layout.twig" %}
 {% block content %}
-<nav>
-    <h1>Sign Up</h1>
-    <a href="/">Back</a>
-    <br><br>
-</nav>
-
-<form method="post" action="/users/register" style="text-align: center">
-    <h1>Sing Up</h1>
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" placeholder="name"  style="margin: 10px" required>
-    <br>
-    <label for="surname">Surname</label>
-    <input type="text" id="surname" name="surname" placeholder="lastname" style="margin: 10px" required >
-    <br>
-    <label for="email">Email</label>
-    <input type="text" id="email" name="email" placeholder="email"  style="margin: 10px" required>
-    <br>
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" placeholder="password"  style="margin: 10px" required>
-    <br>
-    <label for="password">Confirm Password</label>
-    <input type="password" id="passwordConfirm" name="password" placeholder="password" style="margin: 10px" required>
-    <br>
-    <label for="birthday">Birthday</label>
-    <input type="date" id="birthday" name="birthday" placeholder="birthday" style="margin: 10px" required >
-    <br>
-    <input type="submit" name="signUp" value="Sign Up" style="margin: 10px">
-</form>
+    <nav>
+        <h1>Sign Up</h1>
+        <a href="/">Back</a>
+        <br><br>
+    </nav>
+    <form method="post" action="/users/register" style="text-align: center">
+        <h1>Sing Up</h1>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="name" style="margin: 10px" required>
+        <br>
+        <label for="surname">Surname</label>
+        <input type="text" id="surname" name="surname" placeholder="lastname" style="margin: 10px" required>
+        <br>
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" placeholder="email" style="margin: 10px" required>
+        <br>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="password" style="margin: 10px" required>
+        <br>
+        <label for="passwordConfirm">Confirm Password</label>
+        <input type="password" id="passwordConfirm" name="passwordConfirm"
+               placeholder="passwordConfirm" style="margin: 10px" required>
+        <br>
+        <label for="birthday">Birthday</label>
+        <input type="date" id="birthday" name="birthday" style="margin: 10px" required>
+        <br>
+        <input type="submit" name="signUp" value="Sign Up" style="margin: 10px">
+    </form>
     <br><br>
 {% endblock %}

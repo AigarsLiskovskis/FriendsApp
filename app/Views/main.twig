@@ -3,7 +3,9 @@
 <nav>
     <a href="/articles">Read articles</a>  |
     {% if authorized %}
-    <a href="/logout">LOGOUT</a>
+        <a href="/logout">LOGOUT</a> |
+       <a href="/findFriends">Find Friend</a> |
+        <a href="/showFriends">See Friends</a>
     {% else %}
     <a href="/users/signUp">SIGN UP</a> |
     <a href="/users">LOGIN</a>

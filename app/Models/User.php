@@ -5,14 +5,18 @@ namespace App\Models;
 class User
 {
     private int $id;
-    private string $email;
-    private string $createdAt;
+    private ?string $email;
+    private ?string $createdAt;
     private string $name;
     private string $surname;
     private string $birthday;
 
-    public function __construct(int $id, string $email, string $createdAt,
-                                string $name, string $surname, string $birthday)
+    public function __construct(int     $id,
+                                string  $name,
+                                string  $surname,
+                                string  $birthday,
+                                ?string $email = null,
+                                ?string $createdAt = null)
     {
 
         $this->id = $id;

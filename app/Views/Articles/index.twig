@@ -1,26 +1,26 @@
 {% extends "layout.twig" %}
 {% block content %}
-<nav>
-    <h1>All articles</h1>
-    <a href="/">Back</a>
-     {% if authorized %}
-         | <a href="/articles/create">Create new Article</a>
-     {% endif %}
-    <br><br>
-</nav>
-<ul id="navigation">
-    {% for article in articles %}
-    <li>
-        <a href="/articles/{{ article.id }}">
-            {{ article.title }}
-        </a>
-        {% if article.userId == creator %}
-        <form method="post" action="articles/{{ article.id }}/delete">
-            <button onclick="return confirm('Really Delete?')">X</button>
-        </form>
+    <nav>
+        <h1>All articles</h1>
+        <a href="/">Back</a>
+        {% if authorized %}
+            | <a href="/articles/create">Create new Article</a>
         {% endif %}
-    </li>
-    {% endfor %}
-</ul>
+        <br><br>
+    </nav>
+    <ul id="navigation">
+        {% for article in articles %}
+            <li>
+                <a href="/articles/{{ article.id }}">
+                    {{ article.title }}
+                </a>
+                {% if article.userId == userId %}
+                    <form method="post" action="articles/{{ article.id }}/delete">
+                        <button onclick="return confirm('Really Delete?')">X</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
     <br><br>
 {% endblock %}

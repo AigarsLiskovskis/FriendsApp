@@ -13,8 +13,8 @@ class Article
     public function __construct(string $title,
                                 string $description,
                                 string $createdAt,
-                                ?int $userId = null,
-                                ?int $id = null)
+                                ?int   $userId = null,
+                                ?int   $id = null)
     {
         $this->title = $title;
         $this->description = $description;

@@ -11,10 +11,10 @@ class Comment
     private string $createdAt;
     private string $creatorName;
 
-    public function __construct(int $id,
+    public function __construct(int    $id,
                                 string $comment,
-                                int $articleId,
-                                int $userId,
+                                int    $articleId,
+                                int    $userId,
                                 string $createdAt,
                                 string $creatorName)
     {

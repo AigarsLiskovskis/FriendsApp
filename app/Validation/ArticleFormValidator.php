@@ -57,7 +57,7 @@ class ArticleFormValidator
 
     private function validateMin(string $key, int $attribute)
     {
-        if(strlen($this->data[$key]) < $attribute){
+        if (strlen($this->data[$key]) < $attribute) {
             $this->errors[$key][] = "{$key} must be at least {$attribute} characters.";
         }
     }

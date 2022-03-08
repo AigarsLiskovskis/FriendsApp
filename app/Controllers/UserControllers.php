@@ -22,11 +22,16 @@ class UserControllers
      */
     public function register(): Redirect
     {
-        $conn = Database::connection();
-        $sql = "SELECT * FROM users where email = '$_POST[email]'";
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery();
-        if ($result->rowCount() > 0) {
+        $userQuery = Database::connection()
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('users')
+            ->where('email=?')
+            ->setParameter(0, $_POST["email"])
+            ->executeQuery()
+            ->fetchAssociative();
+
+        if ($userQuery) {
             return new Redirect('/users/message');
         } else {
             $hashedPassword = password_hash($_POST['password'], PASSWORD_BCRYPT);
@@ -55,37 +60,39 @@ class UserControllers
      */
     public function signIn(): Redirect
     {
-        $conn = Database::connection();
-        $sql = "SELECT * FROM users where email = '$_POST[email]'";
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery();
+        $userQuery = Database::connection()
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('users')
+            ->where('email=?')
+            ->setParameter(0, $_POST["email"])
+            ->executeQuery()
+            ->fetchAssociative();
 
-        if ($result->rowCount() > 0) {
+        if ($userQuery) {
 
-            $conn = Database::connection();
-            $sql = "SELECT * FROM users where email = '$_POST[email]'";
-            $stmt = $conn->prepare($sql);
-            $userResult = $stmt->executeQuery()->fetchAllAssociative()[0];
-
-            $checkPassword = password_verify($_POST['password'], $userResult['password']);
+            $checkPassword = password_verify($_POST['password'], $userQuery['password']);
 
             if ($checkPassword == false) {
-                $stmt = null;
                 return new Redirect('/users/message');
             }
 
-            $conn = Database::connection();
-            $sql = "SELECT * FROM user_profiles where user_id = '$userResult[id]'";
-            $stmt = $conn->prepare($sql);
-            $profileResult = $stmt->executeQuery()->fetchAllAssociative()[0];
+            $userProfileQuery = Database::connection()
+                ->createQueryBuilder()
+                ->select('*')
+                ->from('user_profiles')
+                ->where('user_id=?')
+                ->setParameter(0, $userQuery['id'])
+                ->executeQuery()
+                ->fetchAssociative();
 
             $user = new User(
-                $userResult['id'],
-                $userResult['email'],
-                $userResult['created_at'],
-                $profileResult['name'],
-                $profileResult['surname'],
-                $profileResult['birthday']
+                $userQuery['id'],
+                $userProfileQuery['name'],
+                $userProfileQuery['surname'],
+                $userProfileQuery['birthday'],
+                $userQuery['email'],
+                $userQuery['created_at'],
             );
 
             Session::setUser($user->getId(), $user->getName(), $user->getSurname() );
@@ -98,7 +105,7 @@ class UserControllers
 
     public function error(): View
     {
-        return new View('Users/message');
+        return new View('404');
     }
 
     public function logout(): Redirect

@@ -14,7 +14,7 @@ class Database
      */
     public static function connection(): \Doctrine\DBAL\Connection
     {
-        if(self::$connection === null){
+        if (self::$connection === null) {
             $connectionParams = [
                 'dbname' => 'friendapp',
                 'user' => 'root',
