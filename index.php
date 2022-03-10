@@ -19,9 +19,7 @@ require_once 'vendor/autoload.php';
 session_start();
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/', [MainPage::class, 'main']);
-
-    $r->addRoute('GET', '/articles', [ArticleControllers::class, 'index']);
+    $r->addRoute('GET', '/', [ArticleControllers::class, 'index']);
     $r->addRoute('GET', '/articles/{id:\d+}', [ArticleControllers::class, 'show']);
 
     $r->addRoute('POST', '/articles', [ArticleControllers::class, 'store']);

@@ -56,7 +56,8 @@ class FriendsController
         return new View('Friends/findFriends', [
             'users' => $users,
             'userId' => $_SESSION["userid"],
-            'userFirstName' => $_SESSION['name']
+            'userFirstName' => $_SESSION['name'],
+            'authorized' => true,
         ]);
     }
 
@@ -121,13 +122,16 @@ class FriendsController
                 'inviters' => $inviters,
                 'friends' => $friends,
                 'loginUser' => $_SESSION["userid"],
-                'userFirstName' => $_SESSION['name']
+                'userFirstName' => $_SESSION['name'],
+                'authorized' => true,
+
             ]);
         } else {
             return new View('Friends/showFriends', [
                 'inviters' => $inviters,
                 'loginUser' => $_SESSION["userid"],
-                'userFirstName' => $_SESSION['name']
+                'userFirstName' => $_SESSION['name'],
+                'authorized' => true,
             ]);
         }
     }

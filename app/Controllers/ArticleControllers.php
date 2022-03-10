@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Database;
 use App\Exceptions\FormValidationException;
 use App\Exceptions\ResourceNotFoundException;
-use App\Models\Apartment;
 use App\Models\Article;
 use App\Redirect;
 use App\Validation\ArticleFormValidator;
@@ -147,6 +146,7 @@ class ArticleControllers
         return new View('Articles/create', [
             'userFirstName' => $_SESSION['name'],
             'errors' => Errors::getAll(),
+            'authorized' => true,
             'inputs' => $_SESSION['inputs'] ?? []
         ]);
     }
@@ -217,7 +217,8 @@ class ArticleControllers
 
         return new View('Articles/update', [
             'article' => $article,
-            'userFirstName' => $_SESSION['name']
+            'userFirstName' => $_SESSION['name'],
+            'authorized' => true,
         ]);
     }
 

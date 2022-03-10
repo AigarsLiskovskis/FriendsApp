@@ -1,47 +1,49 @@
 {% extends "layout.twig" %}
 {% block content %}
-    <nav>
-        <a href="/">Back</a> |
-        <a href="/findFriends">Find Friend</a>
-        <br>
-    </nav>
-    <h3>Wants to become your friends:</h3>
-    <br>
-    <ul id="navigation">
+    <div class="container">
+        <h3>Wants to become your friends:</h3>
         {% for inviter in inviters %}
             {% if user.id != loginUser %}
-                <li>
-                    {{ inviter.name }}
-                    {{ inviter.surname }}
-                    {{ inviter.birthday }}
-                    <form method="post" action="accept/{{ inviter.id }}">
-                        <button>Invite</button>
-                    </form>
-                    <form method="post" action="reject/{{ inviter.id }}">
-                        <button>Reject</button>
-                    </form>
-
-                </li>
+                <div class="col-sm-4">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">One of Users</div>
+                        <div class="panel-body">
+                            <div>{{ inviter.name }}</div>
+                            <div>{{ inviter.surname }}</div>
+                            <div>{{ inviter.birthday }}</div>
+                        </div>
+                        <div class="panel-footer">
+                            <form method="post" action="accept/{{ inviter.id }}">
+                                <button class="btn btn-primary">Invite</button>
+                            </form>
+                            <form method="post" action="reject/{{ inviter.id }}">
+                                <button class="btn btn-primary">Reject</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
         {% endfor %}
-    </ul>
-    <h3>Your friends:</h3>
-    <br>
-    <ul id="navigation">
+        <h3>Your friends:</h3>
         {% for friend in friends %}
             {% if friend.id != loginUser %}
-                <li>
-                    {{ friend.name }}
-                    {{ friend.surname }}
-                    {{ friend.birthday }}
-                    <form method="post" action="end/{{ friend.id }}">
-                        <button>Break up Friendship</button>
-                    </form>
-                </li>
-                <br><br>
+                <div class="col-sm-4">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">One of Users</div>
+                        <div class="panel-body">
+                            <div>{{ friend.name }}</div>
+                            <div>{{ friend.surname }}</div>
+                            <div>{{ friend.birthday }}</div>
+                        </div>
+                        <div class="panel-footer">
+                            <form method="post" action="end/{{ friend.id }}">
+                                <button class="btn btn-primary">Break up Friendship</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
         {% endfor %}
-    </ul>
-    <br><br>
+    </div>
 {% endblock %}
 

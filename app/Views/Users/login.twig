@@ -1,20 +1,19 @@
 {% extends "layout.twig" %}
 {% block content %}
-    <nav>
-        <h1>Login</h1>
-        <a href="/">Back</a>
-        <br><br>
-    </nav>
-
-    <form method="post" action="users/signIn" style="text-align: center">
-        <h1>Login</h1>
-        <label for="email">Email</label>
-        <input type="text" id="email" name="email" placeholder="email" style="margin: 10px" required>
-        <br>
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="password" style="margin: 10px" required>
-        <br>
-        <input type="submit" name="login" value="Login" style="margin: 10px">
-    </form>
-    <br><br>ķ
+    <div class="container" style="width: 350px">
+        <form method="post" action="users/signIn">
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                    else.</small>
+            </div>
+            <div class="form-group">
+                <label for="password1">Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+    <br><br>
 {% endblock %}

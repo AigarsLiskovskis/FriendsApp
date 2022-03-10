@@ -1,14 +1,96 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-        <title>FriendsApp</title>
-        Hello {{ userFirstName }}!
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Friends App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style>
+        /* Remove the navbar's default rounded borders and increase the bottom margin */
+        .navbar {
+            margin-bottom: 0px;
+            border-radius: 0;
+        }
+
+        /*!* Remove the jumbotron's default bottom margin *!*/
+        /*.jumbotron {*/
+        /*    margin-bottom: 0;*/
+        /*}*/
+        .container {
+            width: 800px;
+        }
+
+        /* Add a gray background color and some padding to the footer */
+        footer {
+            background-color: #f2f2f2;
+            padding: 2px;
+        }
+    </style>
 </head>
 <body>
-<div id="content">{% block content %}{% endblock %}</div>
-<div id="footer">
+<div style="position: relative; min-height: 100vh">
+    <div style="padding-bottom: 2.5rem">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <div class="container">
+                <a href="/" class="navbar-brand">Booking App</a>
+                <div style="color: wheat">
+                    {% if authorized %}
+                        <div style="color: wheat">Hello {{ userFirstName }}!</div>
+                    {% endif %}
+                </div>
 
-        &copy; Copyright 2022 FriendsApp
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav">
+                        {% if authorized %}
+                            <li class="nav-item">
+                                <a href="/logout" class="nav-link">LOGOUT</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/articles/create" class="nav-link">CREATE NEW ARTICLE</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/findFriends" class="nav-link">FIND FRIEND</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/showFriends" class="nav-link">SEE FRIENDS</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="/users/signUp" class="nav-link">SIGN UP</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/users" class="nav-link">LOGIN</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="jumbotron" style="height: 200px">
+            <div class="container text-center">
+                <h1>Friends and Articles</h1>
+                <p>View articles and meet Friends</p>
+            </div>
+        </div>
+
+        <div id="content">{% block content %}{% endblock %}</div>
+
+        <footer class="container-fluid text-center" style="position: absolute;
+         bottom:0; width: 100%; height: 2.5rem">
+            <p> &copy; Copyright 2022 Friends App</p>
+        </footer>
+    </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>

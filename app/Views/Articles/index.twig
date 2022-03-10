@@ -1,26 +1,18 @@
 {% extends "layout.twig" %}
 {% block content %}
-    <nav>
-        <h1>All articles</h1>
-        <a href="/">Back</a>
-        {% if authorized %}
-            | <a href="/articles/create">Create new Article</a>
-        {% endif %}
-        <br><br>
-    </nav>
-    <ul id="navigation">
+    <div class="container">
         {% for article in articles %}
-            <li>
-                <a href="/articles/{{ article.id }}">
-                    {{ article.title }}
-                </a>
-                {% if article.userId == userId %}
-                    <form method="post" action="articles/{{ article.id }}/delete">
-                        <button onclick="return confirm('Really Delete?')">X</button>
-                    </form>
-                {% endif %}
-            </li>
+            <a href="/articles/{{ article.id }}">
+                <div class="col-sm-4">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">Article</div>
+                        <div class="panel-body">
+                            <div>{{ article.title }}</div>
+                        </div>
+                        <div class="panel-footer"></div>
+                    </div>
+                </div>
+            </a>
         {% endfor %}
-    </ul>
-    <br><br>
+    </div><br>
 {% endblock %}

@@ -1,24 +1,24 @@
 {% extends "layout.twig" %}
-{% block content %}
-    <nav>
-        <h1>Find new friend</h1>
-        <a href="/">Back</a> |
-        <a href="/showFriends">See Friends</a>
-        <br><br>
-    </nav>
-    <ul id="navigation">
-        {% for user in users %}
-            {% if user.id != loginUser %}
-                <li>
-                    {{ user.name }}
-                    {{ user.surname }}
-                    {{ user.birthday }}
-                    <form method="post" action="invite/{{ user.id }}">
-                        <button>Invite</button>
-                    </form>
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-    <br><br>
-{% endblock %}
+ {% block content %}
+     <div class="container">
+         {% for user in users %}
+             {% if user.id != loginUser %}
+                 <div class="col-sm-4">
+                     <div class="panel panel-success">
+                         <div class="panel-heading">One of Users</div>
+                         <div class="panel-body">
+                             <div> {{ user.name }}</div>
+                             <div> {{ user.surname }}</div>
+                             <div> {{ user.birthday }}</div>
+                         </div>
+                         <div class="panel-footer">
+                             <form method="post" action="invite/{{ user.id }}">
+                                 <button class="btn btn-primary">Invite</button>
+                             </form>
+                         </div>
+                     </div>
+                 </div>
+             {% endif %}
+         {% endfor %}
+     </div>
+ {% endblock %}

@@ -1,55 +1,67 @@
 {% extends "layout.twig" %}
 {% block content %}
-    <nav>
-        <h1>Single article</h1>
-        <a href="/">Home</a>
-        <br>
-        <a href="/articles">Back</a>
-        <br>
+    <div class="container">
         {% if article.userId == user %}
-            <a href="/articles/{{ article.id }}/edit">Edit article</a>
+            <form method="get" action="/articles/{{ article.id }}/edit" style="display: inline;">
+                <button class="btn btn-primary">Edit article</button>
+            </form>
+            <form method="post" action="/articles/{{ article.id }}/delete" style="display: inline;">
+                <button class="btn btn-primary" onclick="return confirm('Delete?')">Delete article</button>
+            </form>
         {% endif %}
-    </nav>
-    <h3>{{ article.title }}</h3>
-    <p>{{ article.description }}</p>
-    <p>
-        <small>
+        <div class="container">
+            <h3>{{ article.title }}</h3>
+            <p>{{ article.description }}</p>
+        </div>
+        <div class="container">
             Created at: {{ article.createdAt }} by: {{ articleOwnerName }}
-            <br>
+        </div>
+        <div class="container">
             Likes: {{ likes }}
-        </small>
-    </p>
-    {% if likeButtons %}
-        <form method="post" action="/articles/{{ article.id }}/likes" h>
-            <button type="submit" name="liked" value="1">Like</button>
-            <button type="submit" name="liked" value="-1">Dislike</button>
-        </form>
-    {% endif %}
-    <br>
-    <ul>
-        {% for comment in comments %}
-            <li>
-                {{ comment.comment }}
-                <br>
-                <small>
-                    Created at: {{ comment.createdAt }} by: {{ comment.creatorName }}
-                </small>
-                {% if comment.userId == user %}
-                    <form method="post" action="/comment/{{ comment.id }}/delete">
-                        <button onclick="return confirm('Really Delete?')">X</button>
-                    </form>
-                {% endif %}
-                <br>
-                <br>
-            </li>
-        {% endfor %}
-    </ul>
-    {% if authorized %}
-        <form method="post" action="/articles/{{ article.id }}/addComment">
-            <label for="comment">Add comment:</label>
-            <textarea type="text" id="comment" name="comment" rows="3" cols="40" required></textarea> <br><br>
-            <input type="submit" value="Add new comment">
-        </form>
-    {% endif %}
-    <br><br>
+        </div>
+        <div class="container">
+            {% if likeButtons %}
+                <form method="post" action="/articles/{{ article.id }}/likes" h>
+                    <button type="submit" name="liked" value="1">Like</button>
+                    <button type="submit" name="liked" value="-1">Dislike</button>
+                </form>
+            {% endif %}
+        </div>
+        <br>
+        <div class="container">
+            <h3>Comments</h3>
+            <ul>
+                {% for comment in comments %}
+                    <div class="container"
+                         style="width: 600px;  border: 2px solid gray; border-radius: 8px; padding: 5px; margin: 5px">
+                        <li>
+                            <div class=container">
+                                {{ comment.comment }}
+                            </div>
+                            Created at: {{ comment.createdAt }} by: {{ comment.creatorName }}
+                            <br>
+                            {% if comment.userId == user %}
+                                <form method="post" action="/comment/{{ comment.id }}/delete">
+                                    <button class="btn btn-primary" onclick="return confirm('Really Delete?')">Delete
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </li>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="container">
+            {% if authorized %}
+                <form method="post" action="/articles/{{ article.id }}/addComment">
+                    <div class="form-group">
+                        <label for="comment">Add comment:</label>
+                        <textarea type="text" class="form-control" id="comment" name="comment" rows="3"
+                                  placeholder="Comment" cols="40" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add new Comment</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
